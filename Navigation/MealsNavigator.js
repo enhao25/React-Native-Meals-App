@@ -6,7 +6,7 @@ import CategoriesScreen from '../Screens/CategoriesScreen';
 import MealDetailsScreen from '../Screens/MealDetailsScreen';
 
 import Colors from '../Constants/Colors';
-import { CATEGORIES } from '../Data/Dummy-data';
+import { CATEGORIES, MEALS } from '../Data/Dummy-data';
 
 
 const MealNavigator = createStackNavigator({
@@ -22,12 +22,19 @@ const MealNavigator = createStackNavigator({
             const catId = navigateData.navigation.getParam('categoryId');
 
             const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
-            return {
-                title: selectedCategory.title
-            }
+            return { title: selectedCategory.title }
         }
     },
-    MealDetail: MealDetailsScreen
+    MealDetail: {
+        screen: MealDetailsScreen,
+        navigationOptions: navigateData => {
+            const mealId = navigateData.navigation.getParam('mealId');
+
+            const selectedMeal = MEALS.find(meal => meal.id === mealId)
+            
+            return { title: selectedMeal.title }
+        }
+    }
 }, {
     defaultNavigationOptions: {
         headerStyle: {
