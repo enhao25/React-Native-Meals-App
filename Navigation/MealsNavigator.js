@@ -1,12 +1,18 @@
+import React from 'react';
+import { Text } from 'react-native';
 import { Platform } from 'react-native';
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CategoriesMealScreen from '../Screens/CategoriesMealScreen';
 import CategoriesScreen from '../Screens/CategoriesScreen';
 import MealDetailsScreen from '../Screens/MealDetailsScreen';
+import FavoritesScreen from '../Screens/FavoritesScreen';
 
 import Colors from '../Constants/Colors';
 import { CATEGORIES, MEALS } from '../Data/Dummy-data';
+import CustomHeaderButton from '../Components/HeaderButton';
 
 
 const MealNavigator = createStackNavigator({
@@ -22,7 +28,7 @@ const MealNavigator = createStackNavigator({
             const catId = navigateData.navigation.getParam('categoryId');
 
             const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
-            return { title: selectedCategory.title }
+            return { headerTitle: selectedCategory.title }
         }
     },
     MealDetail: {
@@ -32,7 +38,17 @@ const MealNavigator = createStackNavigator({
 
             const selectedMeal = MEALS.find(meal => meal.id === mealId)
             
-            return { title: selectedMeal.title }
+            return { 
+                headerTitle: selectedMeal.title,
+                headerRight: <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                    <Item 
+                        title="Favorite" 
+                        iconName='ios-star' 
+                        onPress={() => {
+                            console.log("Mark as fav")
+                        }} />
+                </HeaderButtons>
+            }
         }
     }
 }, {
@@ -44,4 +60,9 @@ const MealNavigator = createStackNavigator({
     }
 });
 
-export default createAppContainer(MealNavigator);
+const MealsTabNavigator = createBottomTabNavigator({
+    Meals:  MealNavigator,
+    Favorites: FavoritesScreen
+});
+
+export default createAppContainer(MealsTabNavigator);
